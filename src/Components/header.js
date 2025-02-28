@@ -1,11 +1,11 @@
 import React from 'react';
 
-function Header() {
+function Header({ onSignInClick }) {
   return (
     <header>
-      <h1>OpenTable </h1>
+      <h1>OpenTable</h1>
       <nav>
-        <button>Sign In</button>
+        <button onClick={onSignInClick}>Sign In</button>
       </nav>
     </header>
   );

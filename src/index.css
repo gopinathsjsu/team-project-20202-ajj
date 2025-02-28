@@ -111,3 +111,54 @@ nav button {
   cursor: pointer;
   border-radius: 4px;
 }
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: auto;
+  position: relative;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.continue-button {
+  background-color: #ff4b5c;
+  color: white;
+  border: none;
+  padding: 15px;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.email-link {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  color: #ff4b5c;
+  text-decoration: none;
+}
