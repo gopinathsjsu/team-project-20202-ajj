@@ -26,7 +26,7 @@ function BookingList() {
 
   return (
     <div>
-      <h2>Bookings</h2>
+      <h2> </h2>
       <ul>
         {bookings.map(booking => (
           <li key={booking.id}>

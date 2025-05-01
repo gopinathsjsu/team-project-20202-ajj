@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
 function Header() {
+  const navigate = useNavigate();
   const token = localStorage.getItem('jwt');
   const isLoggedIn = !!token;
 
@@ -13,13 +14,13 @@ function Header() {
     } catch (e) {
       console.error('Invalid token');
       localStorage.removeItem('jwt');
-      window.location.href = "/login";
+      navigate("/login");
     }
   }
 
   const handleLogout = () => {
     localStorage.removeItem('jwt');
-    window.location.href = "/login";
+    navigate("/login");
   };
 
   return (
@@ -31,7 +32,6 @@ function Header() {
       alignItems: 'center',
       boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)'
     }}>
-      {/* Logo link */}
       <Link to="/" style={{ textDecoration: 'none' }}>
         <h1 style={{
           margin: 0,
@@ -50,24 +50,32 @@ function Header() {
             <span style={{ marginRight: '20px', color: '#fff' }}>
               Logged in as <strong>{userInfo?.role}</strong>
             </span>
-            {userInfo?.role === 'MANAGER' && (
-              <button onClick={() => window.location.href = "/manager/dashboard"} style={{ marginRight: '10px' }}>
-                Manager Dashboard
-              </button>
-            )}
             {userInfo?.role === 'ADMIN' && (
-              <button onClick={() => window.location.href = "/admin/dashboard"} style={{ marginRight: '10px' }}>
-                Admin Panel
-              </button>
+              <Link to="/admin/dashboard">
+                <button style={buttonStyle}>Admin Panel</button>
+              </Link>
             )}
-            <button onClick={handleLogout}>Logout</button>
+            <button onClick={handleLogout} style={buttonStyle}>Logout</button>
           </>
         ) : (
-          <button onClick={() => window.location.href = "/login"}>Sign In</button>
+          <Link to="/login">
+            <button style={buttonStyle}>Sign In</button>
+          </Link>
         )}
       </nav>
     </header>
   );
 }
+
+const buttonStyle = {
+  backgroundColor: '#fff',
+  color: '#ff4b5c',
+  border: 'none',
+  padding: '10px 18px',
+  cursor: 'pointer',
+  borderRadius: '6px',
+  fontWeight: '600',
+  marginLeft: '10px'
+};
 
 export default Header;

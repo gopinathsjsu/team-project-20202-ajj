@@ -1,0 +1,107 @@
+/* === PAGE BACKGROUND WITH OVERLAY === */
+.restaurant-page-container {
+    background-image: url('https://images.unsplash.com/photo-1613145993552-fd1c81b440dd?auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    min-height: 100vh;
+    padding: 60px 20px;
+  }
+  
+  .restaurant-page-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85); /* semi-transparent white overlay */
+    z-index: 0;
+  }
+  
+  /* === MAIN CONTENT === */
+  .restaurant-page-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 30px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    align-items: flex-start;
+  }
+  
+  /* === LEFT PANEL === */
+  .restaurant-details {
+    flex: 2;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  /* === RESTAURANT IMAGE === */
+  .restaurant-banner {
+    height: 300px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 25px;
+  }
+  
+  /* === TEXT === */
+  .restaurant-name {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #222;
+  }
+  
+  .restaurant-description {
+    margin-top: 20px;
+    line-height: 1.6;
+    color: #444;
+  }
+  
+  .section-heading {
+    margin-top: 30px;
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .restaurant-address {
+    margin-top: 10px;
+    color: #666;
+  }
+  
+  /* === MAP === */
+  .map-container {
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  
+  /* === RIGHT PANEL === */
+  .reservation-box-wrapper {
+    flex: 1;
+    position: sticky;
+    top: 30px;
+  }
+  
+  /* === LOADING === */
+  .loading-text {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #555;
+  }
+  
+  .restaurant-page-container {
+    background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    backdrop-filter: blur(25px);
+    padding: 50px 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+  }
+    
