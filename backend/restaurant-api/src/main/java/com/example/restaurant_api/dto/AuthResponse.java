@@ -6,16 +6,18 @@ public class AuthResponse {
     private String token;
     private String email;
     private String name;
+    private String phoneNumber;
     private Role role;
 
     // Default constructor
     public AuthResponse() {}
 
     // All-args constructor
-    public AuthResponse(String token, String email, String name, Role role) {
+    public AuthResponse(String token, String email, String name, String phoneNumber, Role role) {
         this.token = token;
         this.email = email;
         this.name = name;
+        this.phoneNumber = phoneNumber;
         this.role = role;
     }
 
@@ -42,6 +44,14 @@ public class AuthResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Role getRole() {

@@ -38,6 +38,7 @@ public class AuthController {
             token,
             savedUser.getEmail(),
             savedUser.getName(),
+            savedUser.getPhoneNumber(),
             savedUser.getRole()
         );
                 
@@ -61,6 +62,7 @@ public class AuthController {
             token,
             user.getEmail(),
             user.getName(),
+            user.getPhoneNumber(),
             user.getRole()
         );
 

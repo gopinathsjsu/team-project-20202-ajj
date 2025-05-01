@@ -25,12 +25,14 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify({
       email: authResponse.email,
       name: authResponse.name,
+      phoneNumber: authResponse.phoneNumber,
       role: authResponse.role
     }));
     setIsAuthenticated(true);
     setUser({
       email: authResponse.email,
       name: authResponse.name,
+      phoneNumber: authResponse.phoneNumber,
       role: authResponse.role
     });
   };

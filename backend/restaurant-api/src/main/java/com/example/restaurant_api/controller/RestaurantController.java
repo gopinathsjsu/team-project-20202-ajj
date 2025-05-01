@@ -1,7 +1,7 @@
 package com.example.restaurant_api.controller;
 
-import com.example.restaurant_api.entity.Restaurant;
-import com.example.restaurant_api.repository.RestaurantRepository;
+import com.example.restaurant_api.dto.RestaurantDTO;
+import com.example.restaurant_api.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,43 +9,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/restaurants")
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/api")
 public class RestaurantController {
 
     @Autowired
-    private final RestaurantRepository restaurantRepository;
+    private RestaurantService restaurantService;
 
-    public RestaurantController(RestaurantRepository restaurantRepository) {
-        this.restaurantRepository = restaurantRepository;
+    @GetMapping
+    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
+        return ResponseEntity.ok(restaurantService.getAllRestaurants());
     }
 
-    @GetMapping("/restaurants")
-    public List<Restaurant> getRestaurants(@RequestParam(required = false) String search) {
-        if (search != null && !search.isEmpty()) {
-            return restaurantRepository.findByNameContainingIgnoreCaseOrCuisineContainingIgnoreCaseOrLocationContainingIgnoreCase(
-                search, search, search);
+    @GetMapping("/search")
+    public ResponseEntity<List<RestaurantDTO>> searchRestaurants(@RequestParam String query) {
+        return ResponseEntity.ok(restaurantService.searchRestaurants(query));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RestaurantDTO> getRestaurantById(@PathVariable Long id) {
+        RestaurantDTO restaurant = restaurantService.getRestaurantById(id);
+        if (restaurant != null) {
+            return ResponseEntity.ok(restaurant);
         }
-        return restaurantRepository.findAll();
-    }
-
-    @GetMapping("/restaurants/{id}")
-    public ResponseEntity<Restaurant> getRestaurantById(@PathVariable Long id) {
-        return restaurantRepository.findById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
-    }
-
-    // ✅ NEW: Smart Search API
-    @GetMapping("/restaurants/search")
-    public ResponseEntity<List<Restaurant>> searchRestaurants(
-            @RequestParam String date,
-            @RequestParam String time,
-            @RequestParam int partySize,
-            @RequestParam(required = false) String location,
-            @RequestParam(required = false) String cuisine
-    ) {
-        List<Restaurant> results = restaurantRepository.searchAvailable(date, time, partySize, location, cuisine);
-        return ResponseEntity.ok(results);
+        return ResponseEntity.notFound().build();
     }
 }

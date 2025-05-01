@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import api from '../services/api';
 
 function RegisterPage() {
@@ -7,6 +9,7 @@ function RegisterPage() {
     email: '',
     password: '',
     name: '',
+    phoneNumber: '',
     role: 'CUSTOMER'
   });
 
@@ -14,6 +17,10 @@ function RegisterPage() {
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData({ ...formData, phoneNumber: value });
   };
 
   const handleRegister = async (e) => {
@@ -26,6 +33,23 @@ function RegisterPage() {
       console.error(err);
       alert('Registration failed: ' + (err.response?.data || err.message));
     }
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '12px',
+    marginBottom: '15px',
+    borderRadius: '6px',
+    border: '1px solid #ccc',
+    fontSize: '16px'
+  };
+
+  const labelStyle = {
+    display: 'block',
+    textAlign: 'left',
+    marginBottom: '5px',
+    color: '#666',
+    fontSize: '14px'
   };
 
   return (
@@ -47,74 +71,78 @@ function RegisterPage() {
         <h2 style={{ marginBottom: '20px', color: '#ff4b5c' }}>Create an Account</h2>
 
         <form onSubmit={handleRegister}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            style={{
-              width: '100%',
-              padding: '12px',
-              marginBottom: '15px',
-              borderRadius: '6px',
-              border: '1px solid #ccc',
-              fontSize: '16px'
-            }}
-          />
+          <div style={{ marginBottom: '15px' }}>
+            <label style={labelStyle}>
+              Full Name <span style={{ color: '#ff4b5c' }}>*</span>
+            </label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter your full name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              style={inputStyle}
+            />
+          </div>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            style={{
-              width: '100%',
-              padding: '12px',
-              marginBottom: '15px',
-              borderRadius: '6px',
-              border: '1px solid #ccc',
-              fontSize: '16px'
-            }}
-          />
+          <div style={{ marginBottom: '15px' }}>
+            <label style={labelStyle}>
+              Phone Number <span style={{ color: '#666' }}>(Optional)</span>
+            </label>
+            <PhoneInput
+              country={'us'}
+              value={formData.phoneNumber}
+              onChange={handlePhoneChange}
+              inputStyle={{ width: '100%' }}
+            />
+          </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            style={{
-              width: '100%',
-              padding: '12px',
-              marginBottom: '15px',
-              borderRadius: '6px',
-              border: '1px solid #ccc',
-              fontSize: '16px'
-            }}
-          />
+          <div style={{ marginBottom: '15px' }}>
+            <label style={labelStyle}>
+              Email <span style={{ color: '#ff4b5c' }}>*</span>
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              style={inputStyle}
+            />
+          </div>
 
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            style={{
-              width: '100%',
-              padding: '12px',
-              marginBottom: '20px',
-              borderRadius: '6px',
-              border: '1px solid #ccc',
-              fontSize: '16px'
-            }}
-          >
-            <option value="CUSTOMER">Customer</option>
-            <option value="MANAGER">Restaurant Manager</option>
-            <option value="ADMIN">Admin</option>
-          </select>
+          <div style={{ marginBottom: '15px' }}>
+            <label style={labelStyle}>
+              Password <span style={{ color: '#ff4b5c' }}>*</span>
+            </label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Create a password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label style={labelStyle}>
+              Role <span style={{ color: '#ff4b5c' }}>*</span>
+            </label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              style={inputStyle}
+            >
+              <option value="CUSTOMER">Customer</option>
+              <option value="MANAGER">Restaurant Manager</option>
+              <option value="ADMIN">Admin</option>
+            </select>
+          </div>
 
           <button
             type="submit"

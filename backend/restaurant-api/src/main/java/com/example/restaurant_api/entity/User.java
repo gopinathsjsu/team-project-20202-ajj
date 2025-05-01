@@ -17,6 +17,8 @@ public class User {
 
     private String name;
 
+    private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -51,6 +53,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Role getRole() {

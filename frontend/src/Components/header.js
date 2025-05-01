@@ -1,24 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { useAuth } from '../context/AuthContext';
 
 function Header() {
-  const token = localStorage.getItem('jwt');
-  const isLoggedIn = !!token;
-
-  let userInfo = null;
-  if (token) {
-    try {
-      userInfo = jwtDecode(token);
-    } catch (e) {
-      console.error('Invalid token');
-      localStorage.removeItem('jwt');
-      window.location.href = "/login";
-    }
-  }
+  const { isAuthenticated, user, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem('jwt');
+    logout();
     window.location.href = "/login";
   };
 
@@ -45,17 +33,17 @@ function Header() {
       </Link>
 
       <nav>
-        {isLoggedIn ? (
+        {isAuthenticated && user ? (
           <>
             <span style={{ marginRight: '20px', color: '#fff' }}>
-              Logged in as <strong>{userInfo?.role}</strong>
+              Welcome, <strong>{user.name}</strong>
             </span>
-            {userInfo?.role === 'MANAGER' && (
+            {user.role === 'MANAGER' && (
               <button onClick={() => window.location.href = "/manager/dashboard"} style={{ marginRight: '10px' }}>
                 Manager Dashboard
               </button>
             )}
-            {userInfo?.role === 'ADMIN' && (
+            {user.role === 'ADMIN' && (
               <button onClick={() => window.location.href = "/admin/dashboard"} style={{ marginRight: '10px' }}>
                 Admin Panel
               </button>
