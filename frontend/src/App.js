@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './Components/PrivateRoute';
 import Header from './Components/header';
 import SearchBar from './Components/searchbar';
 import RestaurantList from './Components/RestaurantList';
@@ -9,26 +11,52 @@ import ReservationPage from './Components/ReservationPage';
 import RestaurantDetail from './Components/RestaurantDetail';
 import BookingConfirmationPage from './Components/BookingConfirmationPage';
 import LoginPage from './Components/LoginPage';
-import RegisterPage from './Components/RegisterPage'; // ✅ NEW
+import RegisterPage from './Components/RegisterPage';
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Header />
-        <SearchBar />
-        <Tabs />
-        <Routes>
-          <Route path="/" element={<RestaurantList />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} /> {/* ✅ NEW */}
-          <Route path="/reservations" element={<ReservationPage />} />
-          <Route path="/restaurant/:id" element={<RestaurantDetail />} />
-          <Route path="/booking/:restaurantId/:time/:partySize" element={<BookingConfirmationPage />} />
-        </Routes>
-        <BookingList />
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Header />
+          <SearchBar />
+          <Tabs />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<RestaurantList />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+            
+            {/* Protected Routes */}
+            <Route 
+              path="/bookings" 
+              element={
+                <PrivateRoute>
+                  <BookingList />
+                </PrivateRoute>
+              } 
+            />
+            <Route 
+              path="/reservations" 
+              element={
+                <PrivateRoute>
+                  <ReservationPage />
+                </PrivateRoute>
+              } 
+            />
+            <Route 
+              path="/booking/:restaurantId/:time/:partySize" 
+              element={
+                <PrivateRoute>
+                  <BookingConfirmationPage />
+                </PrivateRoute>
+              } 
+            />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import api from '../services/api';
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    name: '',
     role: 'CUSTOMER'
   });
 
@@ -15,15 +16,14 @@ function RegisterPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
     try {
-      await axios.post('http://localhost:8080/auth/register', formData, {
-        headers: { 'Content-Type': 'application/json' } // ✅ Explicitly set headers
-      });
+      await api.post('/auth/register', formData);
       alert('Registration successful! You can now log in.');
       navigate('/login');
     } catch (err) {
-      console.error(err); // ✅ log full error in dev console
+      console.error(err);
       alert('Registration failed: ' + (err.response?.data || err.message));
     }
   };
@@ -46,43 +46,96 @@ function RegisterPage() {
       }}>
         <h2 style={{ marginBottom: '20px', color: '#ff4b5c' }}>Create an Account</h2>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          style={inputStyle}
-        />
+        <form onSubmit={handleRegister}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            style={{
+              width: '100%',
+              padding: '12px',
+              marginBottom: '15px',
+              borderRadius: '6px',
+              border: '1px solid #ccc',
+              fontSize: '16px'
+            }}
+          />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          style={inputStyle}
-        />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            style={{
+              width: '100%',
+              padding: '12px',
+              marginBottom: '15px',
+              borderRadius: '6px',
+              border: '1px solid #ccc',
+              fontSize: '16px'
+            }}
+          />
 
-        <select
-          name="role"
-          value={formData.role}
-          onChange={handleChange}
-          style={inputStyle}
-        >
-          <option value="CUSTOMER">Customer</option>
-          <option value="MANAGER">Restaurant Manager</option>
-          <option value="ADMIN">Admin</option>
-        </select>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            style={{
+              width: '100%',
+              padding: '12px',
+              marginBottom: '15px',
+              borderRadius: '6px',
+              border: '1px solid #ccc',
+              fontSize: '16px'
+            }}
+          />
 
-        <button
-          onClick={handleRegister}
-          style={buttonStyle}
-        >
-          Register
-        </button>
+          <select
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            style={{
+              width: '100%',
+              padding: '12px',
+              marginBottom: '20px',
+              borderRadius: '6px',
+              border: '1px solid #ccc',
+              fontSize: '16px'
+            }}
+          >
+            <option value="CUSTOMER">Customer</option>
+            <option value="MANAGER">Restaurant Manager</option>
+            <option value="ADMIN">Admin</option>
+          </select>
 
-        <p style={{ fontSize: '14px', marginTop: '15px' }}>
+          <button
+            type="submit"
+            style={{
+              backgroundColor: '#ff4b5c',
+              color: '#fff',
+              fontWeight: 'bold',
+              padding: '12px 20px',
+              width: '100%',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '16px',
+              cursor: 'pointer',
+              marginBottom: '20px'
+            }}
+          >
+            Register
+          </button>
+        </form>
+
+        <p style={{ fontSize: '14px' }}>
           Already have an account?{' '}
           <Link to="/login" style={{ color: '#ff4b5c', fontWeight: 'bold' }}>
             Login
@@ -92,26 +145,5 @@ function RegisterPage() {
     </div>
   );
 }
-
-const inputStyle = {
-  width: '100%',
-  padding: '12px',
-  marginBottom: '15px',
-  borderRadius: '6px',
-  border: '1px solid #ccc',
-  fontSize: '16px'
-};
-
-const buttonStyle = {
-  backgroundColor: '#ff4b5c',
-  color: '#fff',
-  fontWeight: 'bold',
-  padding: '12px 20px',
-  width: '100%',
-  border: 'none',
-  borderRadius: '6px',
-  fontSize: '16px',
-  cursor: 'pointer'
-};
 
 export default RegisterPage;

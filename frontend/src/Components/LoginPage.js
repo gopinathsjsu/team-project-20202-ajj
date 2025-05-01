@@ -1,25 +1,29 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import api from '../services/api';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+
     try {
-      const res = await axios.post('http://localhost:8080/auth/login', {
+      const response = await api.post('/auth/login', {
         email,
         password
       });
 
-      const token = res.data;
-      localStorage.setItem('jwt', token);
-      alert('Login successful!');
-      navigate('/');
+      login(response.data);
+      navigate('/bookings');
     } catch (err) {
-      alert('Login failed: ' + (err.response?.data || err.message));
+      setError(err.response?.data || 'Login failed. Please try again.');
     }
   };
 
@@ -41,53 +45,69 @@ function LoginPage() {
       }}>
         <h2 style={{ marginBottom: '20px', color: '#ff4b5c' }}>Login to BookTable</h2>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '12px',
-            marginBottom: '15px',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            fontSize: '16px'
-          }}
-        />
+        {error && (
+          <div style={{
+            color: '#ff4b5c',
+            backgroundColor: '#ffe5e5',
+            padding: '10px',
+            borderRadius: '4px',
+            marginBottom: '15px'
+          }}>
+            {error}
+          </div>
+        )}
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '12px',
-            marginBottom: '20px',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            fontSize: '16px'
-          }}
-        />
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+            style={{
+              width: '100%',
+              padding: '12px',
+              marginBottom: '15px',
+              borderRadius: '6px',
+              border: '1px solid #ccc',
+              fontSize: '16px'
+            }}
+          />
 
-        <button
-          onClick={handleLogin}
-          style={{
-            backgroundColor: '#ff4b5c',
-            color: '#fff',
-            fontWeight: 'bold',
-            padding: '12px 20px',
-            width: '100%',
-            border: 'none',
-            borderRadius: '6px',
-            fontSize: '16px',
-            cursor: 'pointer',
-            marginBottom: '20px'
-          }}
-        >
-          Login
-        </button>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            style={{
+              width: '100%',
+              padding: '12px',
+              marginBottom: '20px',
+              borderRadius: '6px',
+              border: '1px solid #ccc',
+              fontSize: '16px'
+            }}
+          />
+
+          <button
+            type="submit"
+            style={{
+              backgroundColor: '#ff4b5c',
+              color: '#fff',
+              fontWeight: 'bold',
+              padding: '12px 20px',
+              width: '100%',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '16px',
+              cursor: 'pointer',
+              marginBottom: '20px'
+            }}
+          >
+            Login
+          </button>
+        </form>
 
         <p style={{ fontSize: '14px' }}>
           Don't have an account?{' '}

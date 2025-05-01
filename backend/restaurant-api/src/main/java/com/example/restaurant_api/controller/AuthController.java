@@ -1,5 +1,6 @@
 package com.example.restaurant_api.controller;
 
+import com.example.restaurant_api.dto.AuthResponse;
 import com.example.restaurant_api.entity.User;
 import com.example.restaurant_api.repository.UserRepository;
 import com.example.restaurant_api.security.JwtService;
@@ -24,14 +25,27 @@ public class AuthController {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody User user) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email already registered");
+        }
+        
         user.setPassword(encoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return ResponseEntity.ok("User registered successfully");
+        User savedUser = userRepository.save(user);
+        
+        String token = jwtService.generateToken(savedUser.getEmail(), savedUser.getRole());
+        AuthResponse response = new AuthResponse(
+            token,
+            savedUser.getEmail(),
+            savedUser.getName(),
+            savedUser.getRole()
+        );
+                
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User request) {
+    public ResponseEntity<?> login(@RequestBody User request) {
         Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(401).body("User not found");
@@ -43,6 +57,13 @@ public class AuthController {
         }
 
         String token = jwtService.generateToken(user.getEmail(), user.getRole());
-        return ResponseEntity.ok(token);
+        AuthResponse response = new AuthResponse(
+            token,
+            user.getEmail(),
+            user.getName(),
+            user.getRole()
+        );
+
+        return ResponseEntity.ok(response);
     }
 }

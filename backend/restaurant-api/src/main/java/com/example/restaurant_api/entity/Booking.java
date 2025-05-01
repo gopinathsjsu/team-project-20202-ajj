@@ -4,8 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Booking {
 
     @Id
@@ -18,7 +26,10 @@ public class Booking {
     private String customerEmail;
     private String date;
     private String time;
-    private Integer partySize;
+    
+    @Column(nullable = false)
+    private int partySize = 1; // Using primitive int with default value
+    
     private String specialRequest;
 
     // Getters and Setters
@@ -51,9 +62,9 @@ public class Booking {
 
     public void setTime(String time) { this.time = time; }
 
-    public int getPartySize() { return partySize; }
+    public Integer getPartySize() { return partySize; }
 
-    public void setPartySize(int partySize) { this.partySize = partySize; }
+    public void setPartySize(Integer partySize) { this.partySize = partySize != null ? partySize : 1; }
 
     public String getSpecialRequest() { return specialRequest; }
 

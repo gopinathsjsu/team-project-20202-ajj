@@ -6,6 +6,8 @@ import com.example.restaurant_api.service.BookingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000") // Frontend origin
 @RequestMapping("/api")
@@ -15,6 +17,12 @@ public class BookingController {
 
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
+    }
+
+    @GetMapping("/bookings")
+    public ResponseEntity<List<Booking>> getBookings() {
+        List<Booking> bookings = bookingService.getAllBookings();
+        return ResponseEntity.ok(bookings);
     }
 
     @PostMapping("/bookings")
