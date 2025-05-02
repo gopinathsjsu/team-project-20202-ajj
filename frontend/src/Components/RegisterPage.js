@@ -102,49 +102,49 @@ function RegisterPage() {
             <label style={labelStyle}>
               Email <span style={{ color: '#ff4b5c' }}>*</span>
             </label>
-            <input
-              type="email"
-              name="email"
+        <input
+          type="email"
+          name="email"
               placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
+          value={formData.email}
+          onChange={handleChange}
               required
-              style={inputStyle}
-            />
+          style={inputStyle}
+        />
           </div>
 
           <div style={{ marginBottom: '15px' }}>
             <label style={labelStyle}>
               Password <span style={{ color: '#ff4b5c' }}>*</span>
             </label>
-            <input
-              type="password"
-              name="password"
+        <input
+          type="password"
+          name="password"
               placeholder="Create a password"
-              value={formData.password}
-              onChange={handleChange}
+          value={formData.password}
+          onChange={handleChange}
               required
-              style={inputStyle}
-            />
+          style={inputStyle}
+        />
           </div>
 
           <div style={{ marginBottom: '20px' }}>
             <label style={labelStyle}>
               Role <span style={{ color: '#ff4b5c' }}>*</span>
             </label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              style={inputStyle}
-            >
-              <option value="CUSTOMER">Customer</option>
-              <option value="MANAGER">Restaurant Manager</option>
-              <option value="ADMIN">Admin</option>
-            </select>
+        <select
+          name="role"
+          value={formData.role}
+          onChange={handleChange}
+          style={inputStyle}
+        >
+          <option value="CUSTOMER">Customer</option>
+          <option value="MANAGER">Restaurant Manager</option>
+          <option value="ADMIN">Admin</option>
+        </select>
           </div>
 
-          <button
+        <button
             type="submit"
             style={{
               backgroundColor: '#ff4b5c',
@@ -158,9 +158,9 @@ function RegisterPage() {
               cursor: 'pointer',
               marginBottom: '20px'
             }}
-          >
-            Register
-          </button>
+        >
+          Register
+        </button>
         </form>
 
         <p style={{ fontSize: '14px' }}>

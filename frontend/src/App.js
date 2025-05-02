@@ -46,7 +46,7 @@ function App() {
               } 
             />
             <Route 
-              path="/booking/:restaurantId/:time/:partySize" 
+              path="/booking/:restaurantId/:time/:partySize/:date" 
               element={
                 <PrivateRoute>
                   <BookingConfirmationPage />

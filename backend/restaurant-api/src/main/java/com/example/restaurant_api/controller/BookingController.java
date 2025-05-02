@@ -1,45 +1,121 @@
 package com.example.restaurant_api.controller;
 
 import com.example.restaurant_api.Request.BookingRequest;
+import com.example.restaurant_api.entity.AvailabilitySlot;
 import com.example.restaurant_api.entity.Booking;
+import com.example.restaurant_api.entity.Restaurant;
+import com.example.restaurant_api.entity.RestaurantTable;
+import com.example.restaurant_api.entity.User;
+import com.example.restaurant_api.repository.AvailabilitySlotRepository;
+import com.example.restaurant_api.repository.RestaurantRepository;
+import com.example.restaurant_api.repository.TableRepository;
+import com.example.restaurant_api.repository.UserRepository;
+import com.example.restaurant_api.service.AvailabilityService;
 import com.example.restaurant_api.service.BookingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000") // Frontend origin
-@RequestMapping("/api")
+@RequestMapping("/api/bookings")
+@CrossOrigin(origins = "http://localhost:3000")
 public class BookingController {
 
-    private final BookingService bookingService;
+    @Autowired
+    private BookingService bookingService;
 
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private AvailabilityService availabilityService;
+
+    @Autowired
+    private TableRepository tableRepository;
+
+    @Autowired
+    private AvailabilitySlotRepository availabilitySlotRepository;
+
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("h:mm a");
+
+    @GetMapping
+    public ResponseEntity<List<Booking>> getUserBookings() {
+        User user = getCurrentUser();
+        return ResponseEntity.ok(bookingService.findByUser(user));
     }
 
-    @GetMapping("/bookings")
-    public ResponseEntity<List<Booking>> getBookings() {
-        List<Booking> bookings = bookingService.getAllBookings();
-        return ResponseEntity.ok(bookings);
+    @PostMapping
+    public ResponseEntity<Booking> createBooking(@Valid @RequestBody BookingRequest request) {
+        User user = getCurrentUser();
+        Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
+            .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
+        Booking booking = bookingService.createBooking(
+            user,
+            restaurant,
+            request.getDate(),
+            request.getTime(),
+            request.getPartySize(),
+            request.getSpecialRequest()
+        );
+
+        return ResponseEntity.ok(booking);
     }
 
-    @PostMapping("/bookings")
-    public ResponseEntity<?> createBooking(@RequestBody BookingRequest request) {
-        try {
-            Booking created = bookingService.createBooking(request);
-            return ResponseEntity.ok(created);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(409).body("This time slot is already booked.");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Invalid booking request.");
-        }
-    }
-
-    @DeleteMapping("/bookings/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelBooking(@PathVariable Long id) {
-        bookingService.cancelBooking(id);
-        return ResponseEntity.noContent().build();
+        User user = getCurrentUser();
+        bookingService.cancelBooking(id, user);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/availability")
+    public ResponseEntity<List<String>> getAvailableSlots(
+            @RequestParam Long restaurantId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam int partySize
+    ) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
+        List<LocalDateTime> availableTimes = availabilityService.getAvailableTimesForRestaurant(
+                restaurant,
+                date,
+                partySize
+        );
+
+        List<String> formattedTimes = availableTimes.stream()
+                .map(time -> time.format(TIME_FORMATTER))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(formattedTimes);
+    }
+
+    @PostMapping("/availability/populate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> populateAvailability() {
+        availabilityService.populateInitialAvailability();
+        return ResponseEntity.ok("Availability slots populated successfully");
+    }
+
+    private User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByEmail(auth.getName())
+            .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

@@ -27,7 +27,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         System.out.println("=== JwtAuthFilter START ===");
         System.out.println("Request URL: " + request.getRequestURL());
         System.out.println("Request Method: " + request.getMethod());
-        
+
         final String authHeader = request.getHeader("Authorization");
         System.out.println("Auth Header: " + authHeader);
         final String token;

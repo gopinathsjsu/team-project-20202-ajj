@@ -1,91 +1,162 @@
 package com.example.restaurant_api.service;
 
-import com.example.restaurant_api.Request.BookingRequest;
+import com.example.restaurant_api.entity.AvailabilitySlot;
 import com.example.restaurant_api.entity.Booking;
 import com.example.restaurant_api.entity.Restaurant;
+import com.example.restaurant_api.entity.RestaurantTable;
 import com.example.restaurant_api.entity.User;
+import com.example.restaurant_api.repository.AvailabilitySlotRepository;
 import com.example.restaurant_api.repository.BookingRepository;
-import com.example.restaurant_api.repository.RestaurantRepository;
-import com.example.restaurant_api.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingService {
+    private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
 
     @Autowired
     private BookingRepository bookingRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private TableService tableService;
 
     @Autowired
-    private RestaurantRepository restaurantRepository;
+    private AvailabilitySlotRepository availabilitySlotRepository;
 
-    public List<Booking> getAllBookings() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = auth.getName();
-        User user = userRepository.findByEmail(userEmail)
-            .orElseThrow(() -> new IllegalStateException("User not found"));
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("h:mm a");
 
-        // Only return bookings for the authenticated user
+    public List<Booking> findByUser(User user) {
         return bookingRepository.findByUser(user);
     }
 
-    public Booking createBooking(BookingRequest request) {
-        // Get authenticated user
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = auth.getName();
-        User user = userRepository.findByEmail(userEmail)
-            .orElseThrow(() -> new IllegalStateException("User not found"));
+    @Transactional
+    public Booking createBooking(User user, Restaurant restaurant, String date, String time, int partySize, String specialRequest) {
+        logger.info("Creating booking for restaurant {} on {} at {} for {} people", 
+            restaurant.getId(), date, time, partySize);
 
-        // Get restaurant
-        Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
-            .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
-
-        // Check if time slot is already taken
-        boolean alreadyBooked = bookingRepository
-                .findByRestaurantAndDateAndTime(
-                        restaurant,
-                        request.getDate(),
-                        request.getTime()
-                ).isPresent();
-
-        if (alreadyBooked) {
-            throw new IllegalStateException("This time slot is already booked.");
+        // Find an available table
+        Optional<RestaurantTable> availableTable = tableService.findAvailableTable(restaurant, date, time, partySize);
+        
+        if (availableTable.isEmpty()) {
+            logger.error("No available tables found for the requested time slot");
+            throw new RuntimeException("No available tables for the requested time slot");
         }
 
-        // Create new booking
-        Booking booking = new Booking();
-        booking.setUser(user);
-        booking.setRestaurant(restaurant);
-        booking.setDate(request.getDate());
-        booking.setTime(request.getTime());
-        booking.setPartySize(request.getPartySize());
-        booking.setSpecialRequest(request.getSpecialRequest());
+        logger.info("Found available table: {} with capacity {}", 
+            availableTable.get().getTableNumber(), availableTable.get().getCapacity());
 
-        return bookingRepository.save(booking);
+        try {
+            // Find and mark the availability slot as booked
+            LocalDateTime bookingDateTime = LocalDate.parse(date)
+                .atTime(LocalTime.parse(time, TIME_FORMATTER));
+            
+            logger.info("Looking for availability slot at: {}", bookingDateTime);
+
+            List<AvailabilitySlot> availableSlots = availabilitySlotRepository.findAvailableSlots(
+                restaurant,
+                partySize,
+                bookingDateTime,
+                bookingDateTime
+            );
+
+            logger.info("Found {} available slots", availableSlots.size());
+            availableSlots.forEach(s -> logger.info("Slot: table={}, time={}, isBooked={}", 
+                s.getTable().getTableNumber(), s.getAvailableAt(), s.isBooked()));
+
+            Optional<AvailabilitySlot> slot = availableSlots.stream()
+                .filter(s -> s.getTable().equals(availableTable.get()))
+                .findFirst();
+
+            if (slot.isEmpty()) {
+                logger.error("No availability slot found for table {} at {}", 
+                    availableTable.get().getTableNumber(), bookingDateTime);
+                throw new RuntimeException("No availability slot found for the selected time");
+            }
+
+            // Mark the slot as booked
+            AvailabilitySlot slotToBook = slot.get();
+            logger.info("Found slot to book: table={}, time={}, isBooked={}", 
+                slotToBook.getTable().getTableNumber(), slotToBook.getAvailableAt(), slotToBook.isBooked());
+
+            slotToBook.setBooked(true);
+            slotToBook = availabilitySlotRepository.save(slotToBook);
+
+            logger.info("Saved slot with isBooked={}", slotToBook.isBooked());
+
+            // Create and save the booking
+            Booking booking = new Booking(user, restaurant, availableTable.get(), date, time, partySize, specialRequest);
+            booking = bookingRepository.save(booking);
+
+            logger.info("Created booking with ID: {}", booking.getId());
+            return booking;
+
+        } catch (Exception e) {
+            logger.error("Error creating booking: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to create booking: " + e.getMessage());
+        }
     }
 
-    public void cancelBooking(Long id) {
-        // Get authenticated user
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = auth.getName();
-        User user = userRepository.findByEmail(userEmail)
-            .orElseThrow(() -> new IllegalStateException("User not found"));
+    @Transactional
+    public void cancelBooking(Long id, User user) {
+        logger.info("Canceling booking {} for user {}", id, user.getId());
 
-        // Find booking and verify ownership
-        Booking booking = bookingRepository.findById(id)
-            .orElseThrow(() -> new IllegalStateException("Booking not found"));
-
-        if (!booking.getUser().getId().equals(user.getId())) {
-            throw new IllegalStateException("Not authorized to cancel this booking");
+        Optional<Booking> bookingOpt = bookingRepository.findById(id);
+        if (bookingOpt.isEmpty()) {
+            logger.error("Booking {} not found", id);
+            throw new RuntimeException("Booking not found");
         }
 
-        bookingRepository.deleteById(id);
+        Booking booking = bookingOpt.get();
+        // Verify the booking belongs to the user
+        if (!booking.getUser().getId().equals(user.getId())) {
+            logger.error("User {} not authorized to cancel booking {}", user.getId(), id);
+            throw new RuntimeException("Not authorized to cancel this booking");
+        }
+
+        try {
+            // Find and mark the availability slot as available
+            LocalDateTime bookingDateTime = LocalDate.parse(booking.getDate())
+                .atTime(LocalTime.parse(booking.getTime(), TIME_FORMATTER));
+
+            logger.info("Looking for availability slot at: {}", bookingDateTime);
+
+            List<AvailabilitySlot> slots = availabilitySlotRepository.findByTableAndAvailableAt(
+                booking.getTable(),
+                bookingDateTime
+            );
+
+            logger.info("Found {} slots to update", slots.size());
+
+            if (!slots.isEmpty()) {
+                AvailabilitySlot slot = slots.get(0);
+                logger.info("Found slot: table={}, time={}, isBooked={}", 
+                    slot.getTable().getTableNumber(), slot.getAvailableAt(), slot.isBooked());
+
+                slot.setBooked(false);
+                slot = availabilitySlotRepository.save(slot);
+                logger.info("Updated slot isBooked to {}", slot.isBooked());
+            }
+
+            bookingRepository.deleteById(id);
+            logger.info("Successfully deleted booking {}", id);
+
+        } catch (Exception e) {
+            logger.error("Error canceling booking: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to cancel booking: " + e.getMessage());
+        }
+    }
+
+    public boolean isTimeSlotAvailable(Restaurant restaurant, String date, String time, int partySize) {
+        return tableService.isTableAvailable(restaurant, date, time, partySize);
     }
 }

@@ -58,55 +58,55 @@ function LoginPage() {
         )}
 
         <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
             required
-            style={{
-              width: '100%',
-              padding: '12px',
-              marginBottom: '15px',
-              borderRadius: '6px',
-              border: '1px solid #ccc',
-              fontSize: '16px'
-            }}
-          />
+          style={{
+            width: '100%',
+            padding: '12px',
+            marginBottom: '15px',
+            borderRadius: '6px',
+            border: '1px solid #ccc',
+            fontSize: '16px'
+          }}
+        />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
             required
-            style={{
-              width: '100%',
-              padding: '12px',
-              marginBottom: '20px',
-              borderRadius: '6px',
-              border: '1px solid #ccc',
-              fontSize: '16px'
-            }}
-          />
+          style={{
+            width: '100%',
+            padding: '12px',
+            marginBottom: '20px',
+            borderRadius: '6px',
+            border: '1px solid #ccc',
+            fontSize: '16px'
+          }}
+        />
 
-          <button
+        <button
             type="submit"
-            style={{
-              backgroundColor: '#ff4b5c',
-              color: '#fff',
-              fontWeight: 'bold',
-              padding: '12px 20px',
-              width: '100%',
-              border: 'none',
-              borderRadius: '6px',
-              fontSize: '16px',
-              cursor: 'pointer',
-              marginBottom: '20px'
-            }}
-          >
-            Login
-          </button>
+          style={{
+            backgroundColor: '#ff4b5c',
+            color: '#fff',
+            fontWeight: 'bold',
+            padding: '12px 20px',
+            width: '100%',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '16px',
+            cursor: 'pointer',
+            marginBottom: '20px'
+          }}
+        >
+          Login
+        </button>
         </form>
 
         <p style={{ fontSize: '14px' }}>
