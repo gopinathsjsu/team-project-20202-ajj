@@ -33,6 +33,9 @@ public class BookingService {
     @Autowired
     private AvailabilitySlotRepository availabilitySlotRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("h:mm a");
 
     public List<Booking> findByUser(User user) {
@@ -97,6 +100,15 @@ public class BookingService {
             Booking booking = new Booking(user, restaurant, availableTable.get(), date, time, partySize, specialRequest);
             booking = bookingRepository.save(booking);
 
+            // Send confirmation email
+            try {
+                emailService.sendBookingConfirmation(booking);
+                logger.info("Confirmation email sent for booking {}", booking.getId());
+            } catch (Exception e) {
+                logger.error("Failed to send confirmation email: {}", e.getMessage());
+                // Don't throw exception here, as the booking itself was successful
+            }
+
             logger.info("Created booking with ID: {}", booking.getId());
             return booking;
 
@@ -145,6 +157,15 @@ public class BookingService {
                 slot.setBooked(false);
                 slot = availabilitySlotRepository.save(slot);
                 logger.info("Updated slot isBooked to {}", slot.isBooked());
+            }
+
+            // Send cancellation confirmation email
+            try {
+                emailService.sendCancellationConfirmation(booking);
+                logger.info("Cancellation confirmation email sent for booking {}", booking.getId());
+            } catch (Exception e) {
+                logger.error("Failed to send cancellation confirmation email: {}", e.getMessage());
+                // Don't throw exception here, as we still want to proceed with the cancellation
             }
 
             bookingRepository.deleteById(id);
