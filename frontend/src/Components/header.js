@@ -1,13 +1,34 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function Header() {
   const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+  const isAdmin = user?.role === 'ADMIN';
 
   const handleLogout = () => {
     logout();
-    window.location.href = "/login";
+    navigate('/login');
+  };
+
+  const buttonStyle = {
+    backgroundColor: 'transparent',
+    border: '2px solid white',
+    color: 'white',
+    padding: '8px 16px',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    fontWeight: '500',
+    transition: 'all 0.2s ease',
+    marginLeft: '10px',
+  };
+
+  const buttonHoverStyle = {
+    ...buttonStyle,
+    backgroundColor: 'white',
+    color: '#ff4b5c',
   };
 
   return (
@@ -32,26 +53,69 @@ function Header() {
         </h1>
       </Link>
 
-      <nav>
+      <nav style={{ display: 'flex', alignItems: 'center' }}>
         {isAuthenticated && user ? (
           <>
-            <span style={{ marginRight: '20px', color: '#fff' }}>
+            <span style={{ color: '#fff', marginRight: '20px' }}>
               Welcome, <strong>{user.name}</strong>
             </span>
-            {user.role === 'MANAGER' && (
-              <button onClick={() => window.location.href = "/manager/dashboard"} style={{ marginRight: '10px' }}>
-                Manager Dashboard
-              </button>
+            
+            {isAdmin ? (
+              <>
+                <Link 
+                  to="/admin/dashboard" 
+                  style={{ 
+                    ...buttonStyle,
+                    textDecoration: 'none',
+                    ':hover': buttonHoverStyle 
+                  }}
+                >
+                  Dashboard
+                </Link>
+                <Link 
+                  to="/admin/analytics" 
+                  style={{ 
+                    ...buttonStyle,
+                    textDecoration: 'none',
+                    ':hover': buttonHoverStyle 
+                  }}
+                >
+                  Analytics
+                </Link>
+              </>
+            ) : (
+              <Link 
+                to="/bookings" 
+                style={{ 
+                  ...buttonStyle,
+                  textDecoration: 'none',
+                  ':hover': buttonHoverStyle 
+                }}
+              >
+                My Bookings
+              </Link>
             )}
-            {user.role === 'ADMIN' && (
-              <button onClick={() => window.location.href = "/admin/dashboard"} style={{ marginRight: '10px' }}>
-                Admin Panel
-              </button>
-            )}
-            <button onClick={handleLogout}>Logout</button>
+            
+            <button 
+              onClick={handleLogout} 
+              style={buttonStyle}
+              onMouseEnter={e => Object.assign(e.target.style, buttonHoverStyle)}
+              onMouseLeave={e => Object.assign(e.target.style, buttonStyle)}
+            >
+              Logout
+            </button>
           </>
         ) : (
-          <button onClick={() => window.location.href = "/login"}>Sign In</button>
+          <Link 
+            to="/login" 
+            style={{ 
+              ...buttonStyle,
+              textDecoration: 'none',
+              ':hover': buttonHoverStyle 
+            }}
+          >
+            Sign In
+          </Link>
         )}
       </nav>
     </header>

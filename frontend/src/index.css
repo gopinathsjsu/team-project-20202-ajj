@@ -2,7 +2,7 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-  background-image: url('./assets/background.jpg');
+  /* background-image: url('./assets/background.jpg'); */
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;

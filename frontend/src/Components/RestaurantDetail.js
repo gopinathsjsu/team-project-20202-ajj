@@ -175,35 +175,35 @@ function RestaurantDetail() {
             {error}
           </div>
         )}
-        <div style={{
-          display: 'flex',
-          gap: '12px',
-          marginTop: '10px',
-          marginBottom: '25px',
-          flexWrap: 'wrap'
-        }}>
+      <div style={{
+        display: 'flex',
+        gap: '12px',
+        marginTop: '10px',
+        marginBottom: '25px',
+        flexWrap: 'wrap'
+      }}>
           {loading ? (
             <p>Loading available time slots...</p>
           ) : slotsChecked && availableSlots.length === 0 ? (
             <p>No available time slots for the selected date and party size.</p>
           ) : (
             availableSlots.map((slot, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleBookingClick(slot)}
-                style={{
-                  padding: '10px 18px',
-                  backgroundColor: '#ff4b5c',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.3s ease'
-                }}
-              >
-                {slot}
-              </button>
+          <button
+            key={idx}
+            onClick={() => handleBookingClick(slot)}
+            style={{
+              padding: '10px 18px',
+              backgroundColor: '#ff4b5c',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontWeight: '500',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease'
+            }}
+          >
+            {slot}
+          </button>
             ))
           )}
         </div>

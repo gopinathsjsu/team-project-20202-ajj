@@ -21,7 +21,12 @@ function LoginPage() {
       });
 
       login(response.data);
-      navigate('/bookings');
+      // Redirect based on user role
+      if (response.data.role === 'ADMIN') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data || 'Login failed. Please try again.');
     }
@@ -58,55 +63,59 @@ function LoginPage() {
         )}
 
         <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-            required
-          style={{
-            width: '100%',
-            padding: '12px',
-            marginBottom: '15px',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            fontSize: '16px'
-          }}
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-            required
-          style={{
-            width: '100%',
-            padding: '12px',
-            marginBottom: '20px',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            fontSize: '16px'
-          }}
-        />
-
-        <button
+          <div className="form-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '12px',
+                marginBottom: '15px',
+                borderRadius: '6px',
+                border: '1px solid #ccc',
+                fontSize: '16px'
+              }}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '12px',
+                marginBottom: '20px',
+                borderRadius: '6px',
+                border: '1px solid #ccc',
+                fontSize: '16px'
+              }}
+            />
+          </div>
+          <button
             type="submit"
-          style={{
-            backgroundColor: '#ff4b5c',
-            color: '#fff',
-            fontWeight: 'bold',
-            padding: '12px 20px',
-            width: '100%',
-            border: 'none',
-            borderRadius: '6px',
-            fontSize: '16px',
-            cursor: 'pointer',
-            marginBottom: '20px'
-          }}
-        >
-          Login
-        </button>
+            style={{
+              backgroundColor: '#ff4b5c',
+              color: '#fff',
+              fontWeight: 'bold',
+              padding: '12px 20px',
+              width: '100%',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '16px',
+              cursor: 'pointer',
+              marginBottom: '20px'
+            }}
+          >
+            Login
+          </button>
         </form>
 
         <p style={{ fontSize: '14px' }}>

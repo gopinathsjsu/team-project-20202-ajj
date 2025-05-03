@@ -106,12 +106,12 @@ function BookingConfirmationPage() {
         <label htmlFor="specialRequest" style={{ display: 'block', marginBottom: '8px' }}>
           Special requests (optional):
         </label>
-        <textarea
+      <textarea
           id="specialRequest"
-          value={specialRequest}
-          onChange={(e) => setSpecialRequest(e.target.value)}
-          rows="3"
-          placeholder="Add any special requests..."
+        value={specialRequest}
+        onChange={(e) => setSpecialRequest(e.target.value)}
+        rows="3"
+        placeholder="Add any special requests..."
           style={{ 
             width: '100%', 
             padding: '10px', 
@@ -122,23 +122,23 @@ function BookingConfirmationPage() {
         />
       </div>
 
-      <button
-        onClick={handleReservation}
+        <button
+          onClick={handleReservation}
         disabled={loading || error}
-        style={{
+          style={{
           backgroundColor: loading || error ? '#ccc' : '#ff4b5c',
-          color: 'white',
-          padding: '14px',
-          width: '100%',
-          border: 'none',
-          borderRadius: '6px',
-          fontSize: '16px',
+            color: 'white',
+            padding: '14px',
+            width: '100%',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '16px',
           cursor: loading || error ? 'not-allowed' : 'pointer',
-          fontWeight: 'bold'
-        }}
-      >
+            fontWeight: 'bold'
+          }}
+        >
         {loading ? 'Processing...' : 'Complete Reservation'}
-      </button>
+        </button>
     </div>
   );
 }

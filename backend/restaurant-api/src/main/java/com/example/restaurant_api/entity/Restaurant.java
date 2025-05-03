@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 
 @Entity
 public class Restaurant {
@@ -13,10 +16,20 @@ public class Restaurant {
 
     private String name;
     private String cuisine;
+    @Column(nullable = false)
     private String location;
-    private double rating;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RestaurantStatus status = RestaurantStatus.PENDING_APPROVAL;
 
     private String imageUrl; // ✅ NEW FIELD
+
+    private Double rating;
+
+    private Double lat;
+
+    private Double lng;
 
     // Getters and Setters
     public Long getId() {
@@ -65,5 +78,13 @@ public class Restaurant {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public RestaurantStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RestaurantStatus status) {
+        this.status = status;
     }
 }
