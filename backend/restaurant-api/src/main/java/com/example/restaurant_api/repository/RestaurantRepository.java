@@ -18,17 +18,18 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findByNameContainingIgnoreCaseOrCuisineContainingIgnoreCaseOrLocationContainingIgnoreCaseAndStatus(
         String name, String cuisine, String location, RestaurantStatus status);
 
-    // ✅ New: Flexible search method for filters
+    // ✅ Updated: Combined search method for filters
     @Query("SELECT r FROM Restaurant r " +
-           "WHERE (:location IS NULL OR LOWER(r.location) LIKE LOWER(CONCAT('%', :location, '%'))) " +
-           "AND (:cuisine IS NULL OR LOWER(r.cuisine) LIKE LOWER(CONCAT('%', :cuisine, '%'))) " +
+           "WHERE (:searchTerm IS NULL OR " +
+           "LOWER(r.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+           "LOWER(r.location) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+           "LOWER(r.cuisine) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
            "AND r.status = 'APPROVED'")
     List<Restaurant> searchAvailable(
         @Param("date") String date,
         @Param("time") String time,
         @Param("partySize") int partySize,
-        @Param("location") String location,
-        @Param("cuisine") String cuisine
+        @Param("searchTerm") String searchTerm
     );
 
     List<Restaurant> findByStatus(RestaurantStatus status);

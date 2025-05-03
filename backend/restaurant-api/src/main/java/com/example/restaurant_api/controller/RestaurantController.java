@@ -22,8 +22,12 @@ public class RestaurantController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<RestaurantDTO>> searchRestaurants(@RequestParam String query) {
-        return ResponseEntity.ok(restaurantService.searchRestaurants(query));
+    public ResponseEntity<List<RestaurantDTO>> searchRestaurants(
+            @RequestParam(required = false) String date,
+            @RequestParam(required = false) String time,
+            @RequestParam(required = false) Integer partySize,
+            @RequestParam(required = false) String location) {
+        return ResponseEntity.ok(restaurantService.searchRestaurants(date, time, partySize, location, null));
     }
 
     @GetMapping("/{id}")

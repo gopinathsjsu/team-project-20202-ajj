@@ -21,6 +21,9 @@ public class RestaurantService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private TableService tableService;
+
     public List<RestaurantDTO> getAllRestaurants() {
         String today = LocalDate.now().toString();
         return restaurantRepository.findByStatus(RestaurantStatus.APPROVED).stream()
@@ -28,13 +31,30 @@ public class RestaurantService {
                 .collect(Collectors.toList());
     }
 
-    public List<RestaurantDTO> searchRestaurants(String search) {
-        String today = LocalDate.now().toString();
-        return restaurantRepository
-                .findByNameContainingIgnoreCaseOrCuisineContainingIgnoreCaseOrLocationContainingIgnoreCaseAndStatus(
-                        search, search, search, RestaurantStatus.APPROVED)
-                .stream()
-                .map(restaurant -> convertToDTO(restaurant, today))
+    public List<RestaurantDTO> searchRestaurants(String date, String time, Integer partySize, String location, String cuisine) {
+        String searchDate = date != null ? date : LocalDate.now().toString();
+        
+        // Combine location and cuisine into a single search term
+        String searchTerm = location; // Since frontend sends the search text in location parameter
+        
+        // Get all approved restaurants that match the search criteria
+        List<Restaurant> restaurants = restaurantRepository.searchAvailable(
+            searchDate,
+            time,
+            partySize != null ? partySize : 1,
+            searchTerm
+        );
+
+        // Filter restaurants based on table availability if time and party size are provided
+        if (time != null && partySize != null) {
+            restaurants = restaurants.stream()
+                .filter(restaurant -> tableService.isTableAvailable(restaurant, searchDate, time, partySize))
+                .collect(Collectors.toList());
+        }
+
+        // Convert to DTOs with booking counts
+        return restaurants.stream()
+                .map(restaurant -> convertToDTO(restaurant, searchDate))
                 .collect(Collectors.toList());
     }
 
