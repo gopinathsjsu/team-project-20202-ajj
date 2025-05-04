@@ -31,6 +31,18 @@ function SearchBar() {
     return `${hour12}:00 ${ampm}`;
   };
 
+  // Generate time slots for the dropdown
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let i = 0; i < 24; i++) {
+      const hour = i % 12 || 12;
+      const ampm = i < 12 ? 'AM' : 'PM';
+      options.push(`${hour}:00 ${ampm}`);
+      options.push(`${hour}:30 ${ampm}`);
+    }
+    return options;
+  };
+
   // Set initial form values when component mounts or URL parameters change
   useEffect(() => {
     if (location.pathname === '/') {
@@ -84,12 +96,9 @@ function SearchBar() {
           aria-label="Select time"
           className="search-input time-select"
         >
-          {Array.from({ length: 24 }, (_, i) => {
-            const hour = i % 12 || 12;
-            const ampm = i < 12 ? 'AM' : 'PM';
-            const label = `${hour}:00 ${ampm}`;
-            return <option key={i} value={label}>{label}</option>;
-          })}
+          {generateTimeOptions().map((timeSlot, i) => (
+            <option key={i} value={timeSlot}>{timeSlot}</option>
+          ))}
         </select>
 
         <select

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class AvailabilityService {
     private static final LocalTime CLOSING_TIME = LocalTime.of(22, 0);
     private static final LocalTime LAST_BOOKING_TIME = LocalTime.of(21, 0);
     private static final int DAYS_TO_POPULATE = 7;
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("h:mm a");
 
     @PostConstruct
     public void init() {
@@ -102,6 +104,30 @@ public class AvailabilityService {
         
         // Batch save all slots for better performance
         availabilitySlotRepository.saveAll(slots);
+    }
+
+    @Transactional(readOnly = true)
+    public List<LocalDateTime> getAvailableTimesForRestaurant(Restaurant restaurant, LocalDate date, String requestedTime, int partySize) {
+        // Parse the requested time
+        LocalTime baseTime = LocalTime.parse(requestedTime, TIME_FORMATTER);
+        
+        // Calculate the time window (±60 minutes)
+        LocalTime startTime = baseTime.minusMinutes(60);
+        LocalTime endTime = baseTime.plusMinutes(60);
+        
+        // Ensure we don't go outside restaurant hours
+        startTime = startTime.isBefore(OPENING_TIME) ? OPENING_TIME : startTime;
+        endTime = endTime.isAfter(CLOSING_TIME) ? CLOSING_TIME : endTime;
+
+        LocalDateTime startDateTime = date.atTime(startTime);
+        LocalDateTime endDateTime = date.atTime(endTime);
+
+        return availabilitySlotRepository.findAvailableTimes(
+            restaurant,
+            partySize,
+            startDateTime,
+            endDateTime
+        );
     }
 
     @Transactional(readOnly = true)

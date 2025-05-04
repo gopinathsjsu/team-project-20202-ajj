@@ -15,6 +15,9 @@ public class JwtService {
     @Value("${jwt.secret:your-256-bit-secret-key-here-make-it-long-enough}")
     private String secretKey;
 
+    @Value("${jwt.expiration:3600000}")  // Default to 1 hour if not configured
+    private long jwtExpiration;
+
     private Key getSigningKey() {
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -26,7 +29,7 @@ public class JwtService {
                 .setSubject(email)
                 .claim("role", role.name())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey())
                 .compact();
         System.out.println("Generated token with role claim: " + role.name());

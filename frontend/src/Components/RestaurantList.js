@@ -17,10 +17,9 @@ function RestaurantList() {
         const time = searchParams.get("time");
         const partySize = searchParams.get("partySize");
         const location = searchParams.get("location");
-        const cuisine = searchParams.get("cuisine");
 
         const response = await api.get("/api/restaurants/search", {
-          params: { date, time, partySize, location, cuisine }
+          params: { date, time, partySize, location }
         });
         
         setRestaurants(response.data);
@@ -36,34 +35,6 @@ function RestaurantList() {
 
     fetchRestaurants();
   }, [searchParams]);
-
-  const generateTimeSlots = (baseTime) => {
-    // Parse the base time (e.g., "7:00 PM")
-    const [time, period] = baseTime.split(' ');
-    const [hours, minutes] = time.split(':').map(Number);
-    
-    // Convert to 24-hour format
-    let hour24 = hours;
-    if (period === 'PM' && hours !== 12) hour24 += 12;
-    if (period === 'AM' && hours === 12) hour24 = 0;
-
-    // Generate slots 30 minutes before and after
-    const slots = [];
-    for (let i = -30; i <= 30; i += 15) {
-      const slotTime = new Date();
-      slotTime.setHours(hour24);
-      slotTime.setMinutes(minutes);
-      slotTime.setMinutes(slotTime.getMinutes() + i);
-
-      const slotHour = slotTime.getHours() % 12 || 12;
-      const slotMinutes = slotTime.getMinutes().toString().padStart(2, '0');
-      const slotPeriod = slotTime.getHours() >= 12 ? 'PM' : 'AM';
-      
-      slots.push(`${slotHour}:${slotMinutes} ${slotPeriod}`);
-    }
-    
-    return slots;
-  };
 
   const handleTimeClick = (restaurantId, time) => {
     const partySize = searchParams.get("partySize") || "1";
@@ -105,7 +76,7 @@ function RestaurantList() {
             </div>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
-              {generateTimeSlots(searchParams.get("time") || "7:00 PM").map((slot, i) => (
+              {restaurant.availableTimeSlots && restaurant.availableTimeSlots.map((slot, i) => (
                 <button
                   key={i}
                   className="time-slot"
@@ -114,6 +85,9 @@ function RestaurantList() {
                   {slot}
                 </button>
               ))}
+              {(!restaurant.availableTimeSlots || restaurant.availableTimeSlots.length === 0) && (
+                <p>No available time slots for the selected criteria.</p>
+              )}
             </div>
           </div>
         ))

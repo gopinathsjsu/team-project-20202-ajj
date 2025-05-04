@@ -21,9 +21,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     // ✅ Updated: Combined search method for filters
     @Query("SELECT r FROM Restaurant r " +
            "WHERE (:searchTerm IS NULL OR " +
-           "LOWER(r.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-           "LOWER(r.location) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-           "LOWER(r.cuisine) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
+           "LOWER(CAST(r.name AS string)) LIKE LOWER(CONCAT('%', CAST(:searchTerm AS string), '%')) OR " +
+           "LOWER(CAST(r.location AS string)) LIKE LOWER(CONCAT('%', CAST(:searchTerm AS string), '%')) OR " +
+           "LOWER(CAST(r.cuisine AS string)) LIKE LOWER(CONCAT('%', CAST(:searchTerm AS string), '%'))) " +
            "AND r.status = 'APPROVED'")
     List<Restaurant> searchAvailable(
         @Param("date") String date,
