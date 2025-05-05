@@ -38,11 +38,12 @@ A web-based table reservation platform inspired by OpenTable. This project allow
 
 ## 📅 Scrum Artifacts
 
-- ✅ 6 Sprint backlogs
-- ✅ Weekly Scrum reports
-- ✅ Burndown charts per sprint
+- ✅ 6 Sprint backlogs (Google Sheets)
+- ✅ 6 Sprint burndown charts (tracked per sprint tab)
+- ✅ Weekly scrum reports per member
+- ✅ XP values (Communication + Simplicity)
 
-📎 [Sprint Tracking Sheet (Google Sheets)](https://docs.google.com/spreadsheets/d/1zMABJQMWXGkG3-ncUaIRX_ld5xB1YDD3TeNBe9Ild4c/edit?usp=sharing)
+📎 [📊 Sprint Tracking Sheet (Google Sheets)](https://docs.google.com/spreadsheets/d/1zMABJQMWXGkG3-ncUaIRX_ld5xB1YDD3TeNBe9Ild4c/edit?usp=sharing)
 
 ---
 
