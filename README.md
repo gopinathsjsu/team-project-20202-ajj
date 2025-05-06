@@ -51,7 +51,7 @@ A web-based table reservation platform inspired by OpenTable. This project allow
 
 - [📝 Weekly Scrum Report](./project-journal/weekly_scrum.md)
 - [💡 XP Core Values Summary](./project-journal/xp_core_values.md)
-- [📸 Sprint Task Board Screenshot](./project-journal/sprint_taskboard.png)
+- [📸 Sprint Task Board Screenshot](./project-journal/sprint_taskboard.PNG)
 
 ---
 
