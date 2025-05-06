@@ -59,16 +59,19 @@ A web-based table reservation platform inspired by OpenTable. This project allow
 
 All core UI screens are wireframed and stored in:
 📁 `/docs/ui-wireframes/`
+| Screen                         | Link |
+|-------------------------------|----------------|
+| 🔍 Search Page                | [View](https://github.com/gopinathsjsu/team-project-20202-ajit-main/blob/main/docs/ui-wireframes/search_page_wireframe.png)
+| 🏠 Restaurant Detail Page     | [View](https://github.com/gopinathsjsu/team-project-20202-ajit-main/blob/main/docs/ui-wireframes/restaurant_detail_wireframe.png)
+| ✅ Booking Confirmation Page  | [View](https://github.com/gopinathsjsu/team-project-20202-ajit-main/blob/main/docs/ui-wireframes/booking_confirmation_wireframe.png)
+| 🎉 Booking Success Page       | [View](https://github.com/gopinathsjsu/team-project-20202-ajit-main/blob/main/docs/ui-wireframes/booking_reservation_wireframe.png)
+| 🔐 Login Page                 | [View](https://github.com/gopinathsjsu/team-project-20202-ajit-main/blob/main/docs/ui-wireframes/login_wireframe.png)
+| 📝 Register Page              | [View](https://github.com/gopinathsjsu/team-project-20202-ajit-main/blob/main/docs/ui-wireframes/register_wireframe.png)
+| 🧑‍💼 Admin Dashboard          | [View](https://github.com/gopinathsjsu/team-project-20202-ajit-main/blob/main/docs/ui-wireframes/admin_dashboard_wireframe.png)
+| 📊 Admin Analytics            | [View](https://github.com/gopinathsjsu/team-project-20202-ajit-main/blob/main/docs/ui-wireframes/admin_analytics_wireframe.png)
+| 🗃️ Admin Archived View        | [View](https://github.com/gopinathsjsu/team-project-20202-ajit-main/blob/main/docs/ui-wireframes/archive_restaurants_wireframe.png)
 
-- Search Page
-- Restaurant Detail Page
-- Booking Confirmation Page
-- Booking Success Page
-- Login Page
-- Register Page
-- Admin Dashboard
-- Admin Analytics
-- Admin Archived View
+---
 
 ---
 
