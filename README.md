@@ -51,3 +51,29 @@ A web-based table reservation platform inspired by OpenTable. This project allow
 
 - [📝 Weekly Scrum Report](./project-journal/weekly_scrum.md)
 - [💡 XP Core Values Summary](./project-journal/xp_core_values.md)
+- [📸 Sprint Task Board Screenshot](./project-journal/sprint_taskboard.png)
+
+---
+
+## 🎨 UI Wireframes
+
+All core UI screens are wireframed and stored in:
+📁 `/docs/ui-wireframes/`
+
+- Search Page
+- Restaurant Detail Page
+- Booking Confirmation Page
+- Booking Success Page
+- Login Page
+- Register Page
+- Admin Dashboard
+- Admin Analytics
+- Admin Archived View
+
+---
+
+## 🧱 Architecture Diagrams
+
+📁 `/docs/diagrams/`
+- [🧩 Component Diagram](./docs/diagrams/Component_Diagram.jpeg)
+- [🌐 Deployment Diagram](./docs/diagrams/Deployment_diagram.png)
