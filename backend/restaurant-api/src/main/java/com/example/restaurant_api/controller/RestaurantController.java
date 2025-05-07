@@ -1,6 +1,8 @@
 package com.example.restaurant_api.controller;
 
 import com.example.restaurant_api.dto.RestaurantDTO;
+import com.example.restaurant_api.entity.Restaurant;
+import com.example.restaurant_api.entity.RestaurantReview;
 import com.example.restaurant_api.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +39,21 @@ public class RestaurantController {
             return ResponseEntity.ok(restaurant);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/reviews")
+    public ResponseEntity<List<RestaurantReview>> getRestaurantReviews(@PathVariable Long id) {
+        return ResponseEntity.ok(restaurantService.getRestaurantReviews(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant) {
+        return ResponseEntity.ok(restaurantService.saveRestaurant(restaurant));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id) {
+        restaurantService.deleteRestaurant(id);
+        return ResponseEntity.ok().build();
     }
 }

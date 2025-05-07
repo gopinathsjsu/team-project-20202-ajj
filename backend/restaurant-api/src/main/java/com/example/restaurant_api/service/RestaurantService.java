@@ -3,14 +3,17 @@ package com.example.restaurant_api.service;
 import com.example.restaurant_api.dto.RestaurantDTO;
 import com.example.restaurant_api.entity.Restaurant;
 import com.example.restaurant_api.entity.RestaurantStatus;
+import com.example.restaurant_api.entity.RestaurantReview;
 import com.example.restaurant_api.repository.BookingRepository;
 import com.example.restaurant_api.repository.RestaurantRepository;
+import com.example.restaurant_api.repository.RestaurantReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +30,9 @@ public class RestaurantService {
 
     @Autowired
     private AvailabilityService availabilityService;
+
+    @Autowired
+    private RestaurantReviewRepository reviewRepository;
 
     public List<RestaurantDTO> getAllRestaurants() {
         String today = LocalDate.now().toString();
@@ -102,6 +108,18 @@ public class RestaurantService {
 
     public List<Restaurant> findAllActive() {
         return restaurantRepository.findByStatus(RestaurantStatus.APPROVED);
+    }
+
+    public List<RestaurantReview> getRestaurantReviews(Long restaurantId) {
+        return reviewRepository.findByRestaurantId(restaurantId);
+    }
+
+    public Restaurant saveRestaurant(Restaurant restaurant) {
+        return restaurantRepository.save(restaurant);
+    }
+
+    public void deleteRestaurant(Long id) {
+        restaurantRepository.deleteById(id);
     }
 
     private RestaurantDTO convertToDTO(Restaurant restaurant, String date, String baseTime, int partySize) {
