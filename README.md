@@ -77,9 +77,9 @@ All core UI screens are wireframed and stored in:
 Live UI Screens from the deployed BookTable application:
 **Search Page**
 - ![Search Page](./docs/screenshots/search_page_screenshot.png)
-- **Booking Page**
+**Booking Confirmation**
 - ![Booking Page](./docs/screenshots/booking_page_screenshot.png)
-- **Admin Dashboard**
+**Admin Dashboard**
 - ![Admin Dashboard](./docs/screenshots/admin_dashboard_screenshot.png)
 ---
 
