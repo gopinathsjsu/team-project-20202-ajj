@@ -1,0 +1,54 @@
+/* App layout */
+.App {
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Optional App-logo (if you're using one) */
+.App-logo {
+  height: 80px;
+  pointer-events: none;
+  margin-bottom: 20px;
+  animation: App-logo-spin 6s linear infinite;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Header section */
+.App-header {
+  background-color: #ff4b5c;
+  color: white;
+  padding: 40px 20px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Useful link style */
+.App-link {
+  color: #ff4b5c;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.App-link:hover {
+  color: #e04350;
+  text-decoration: underline;
+}
+
+/* Responsive base tweaks */
+@media (max-width: 600px) {
+  .App-header {
+    font-size: 1.4rem;
+    padding: 20px 10px;
+  }
+}

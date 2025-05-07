@@ -1,0 +1,41 @@
+package com.example.restaurant_api.controller;
+
+import com.example.restaurant_api.dto.RestaurantDTO;
+import com.example.restaurant_api.service.RestaurantService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/restaurants")
+@CrossOrigin(origins = "http://localhost:3000")
+public class RestaurantController {
+
+    @Autowired
+    private RestaurantService restaurantService;
+
+    @GetMapping
+    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
+        return ResponseEntity.ok(restaurantService.getAllRestaurants());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<RestaurantDTO>> searchRestaurants(
+            @RequestParam(required = false) String date,
+            @RequestParam(required = false) String time,
+            @RequestParam(required = false) Integer partySize,
+            @RequestParam(required = false) String location) {
+        return ResponseEntity.ok(restaurantService.searchRestaurants(date, time, partySize, location, null));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RestaurantDTO> getRestaurantById(@PathVariable Long id) {
+        RestaurantDTO restaurant = restaurantService.getRestaurantById(id);
+        if (restaurant != null) {
+            return ResponseEntity.ok(restaurant);
+        }
+        return ResponseEntity.notFound().build();
+    }
+}
