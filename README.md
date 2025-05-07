@@ -88,3 +88,12 @@ Live UI Screens from the deployed BookTable application:
 📁 `/docs/diagrams/`
 - [🧩 Component Diagram](./docs/diagrams/Component_Diagram.jpeg)
 - [🌐 Deployment Diagram](./docs/diagrams/Deployment_diagram.png)
+
+## 🎯 Design Decisions
+
+- **JWT Authentication:** Chosen for stateless login with role-based access
+- **Microservice-Like API Split:** Auth, Booking, Admin routes organized for clarity
+- **Mocked Notification Service:** Kept it modular for future Twilio/email integration
+- **Wireframes First:** Used UI sketches to align on UX before coding
+- **Scrum + XP:** Used 6 sprint iterations, weekly journaling, and XP values for process control
+
