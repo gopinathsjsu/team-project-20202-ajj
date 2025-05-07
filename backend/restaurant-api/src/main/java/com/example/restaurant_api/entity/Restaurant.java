@@ -25,7 +25,7 @@ public class Restaurant {
 
     private String imageUrl; // ✅ NEW FIELD
 
-    private Double rating;
+    private Float rating;
 
     private Double lat;
 
@@ -64,11 +64,11 @@ public class Restaurant {
         this.location = location;
     }
 
-    public double getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 
@@ -86,5 +86,21 @@ public class Restaurant {
 
     public void setStatus(RestaurantStatus status) {
         this.status = status;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 }

@@ -58,7 +58,7 @@ public class RestaurantService {
         );
 
         // Convert to DTOs with booking counts and available time slots
-        List<RestaurantDTO> restaurantDTOs = restaurants.stream()
+        return restaurants.stream()
                 .map(restaurant -> {
                     // Get available slots for this restaurant
                     List<String> slots = availabilityService.getAvailableTimesForRestaurant(
@@ -71,21 +71,10 @@ public class RestaurantService {
                     .collect(Collectors.toList());
 
                     // Create DTO with available slots
-                    return new RestaurantDTO(
-                        restaurant.getId(),
-                        restaurant.getName(),
-                        restaurant.getCuisine(),
-                        restaurant.getLocation(),
-                        restaurant.getRating(),
-                        restaurant.getImageUrl(),
-                        bookingRepository.countBookingsByRestaurantAndDate(restaurant, searchDate),
-                        slots
-                    );
+                    return convertToDTO(restaurant, searchDate, searchTime, searchPartySize);
                 })
                 .filter(dto -> dto.getAvailableTimeSlots() != null && !dto.getAvailableTimeSlots().isEmpty())
                 .collect(Collectors.toList());
-
-        return restaurantDTOs;
     }
 
     public RestaurantDTO getRestaurantById(Long id) {
@@ -146,7 +135,9 @@ public class RestaurantService {
                 restaurant.getRating(),
                 restaurant.getImageUrl(),
                 bookedCount,
-                availableSlots
+                availableSlots,
+                restaurant.getLat(),
+                restaurant.getLng()
         );
     }
 } 

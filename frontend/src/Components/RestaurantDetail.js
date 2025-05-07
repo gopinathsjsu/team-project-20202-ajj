@@ -268,7 +268,7 @@ function RestaurantDetail() {
                 width="100%"
                 height="100%"
                 frameBorder="0"
-                src={`https://www.google.com/maps?q=${restaurant.lat || 37.3541},${restaurant.lng || -121.9552}&z=15&output=embed`}
+                src={`https://www.google.com/maps?q=${restaurant.lat},${restaurant.lng}&z=15&output=embed`}
                 allowFullScreen
                 title="Restaurant Location"
                 style={{ borderRadius: '8px' }}

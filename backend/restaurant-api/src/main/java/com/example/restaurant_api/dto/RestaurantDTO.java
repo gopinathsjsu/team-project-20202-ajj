@@ -7,18 +7,20 @@ public class RestaurantDTO {
     private String name;
     private String cuisine;
     private String location;
-    private double rating;
+    private Float rating;
     private String imageUrl;
     private int bookedCount;
     private String time;
     private int partySize;
     private List<String> availableTimeSlots;
+    private Double lat;
+    private Double lng;
 
     // Default constructor
     public RestaurantDTO() {}
 
     // Constructor for basic restaurant info
-    public RestaurantDTO(Long id, String name, String cuisine, String location, double rating, String imageUrl, int bookedCount) {
+    public RestaurantDTO(Long id, String name, String cuisine, String location, Float rating, String imageUrl, int bookedCount) {
         this.id = id;
         this.name = name;
         this.cuisine = cuisine;
@@ -29,7 +31,7 @@ public class RestaurantDTO {
     }
 
     // Constructor with time and party size
-    public RestaurantDTO(Long id, String name, String cuisine, String location, double rating, String imageUrl, int bookedCount, String time, int partySize) {
+    public RestaurantDTO(Long id, String name, String cuisine, String location, Float rating, String imageUrl, int bookedCount, String time, int partySize) {
         this.id = id;
         this.name = name;
         this.cuisine = cuisine;
@@ -42,7 +44,7 @@ public class RestaurantDTO {
     }
 
     // Constructor with available slots
-    public RestaurantDTO(Long id, String name, String cuisine, String location, double rating, String imageUrl, int bookedCount, List<String> availableTimeSlots) {
+    public RestaurantDTO(Long id, String name, String cuisine, String location, Float rating, String imageUrl, int bookedCount, List<String> availableTimeSlots, Double lat, Double lng) {
         this.id = id;
         this.name = name;
         this.cuisine = cuisine;
@@ -51,6 +53,8 @@ public class RestaurantDTO {
         this.imageUrl = imageUrl;
         this.bookedCount = bookedCount;
         this.availableTimeSlots = availableTimeSlots;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     // Getters and Setters
@@ -66,8 +70,8 @@ public class RestaurantDTO {
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
 
-    public double getRating() { return rating; }
-    public void setRating(double rating) { this.rating = rating; }
+    public Float getRating() { return rating; }
+    public void setRating(Float rating) { this.rating = rating; }
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
@@ -83,4 +87,20 @@ public class RestaurantDTO {
 
     public List<String> getAvailableTimeSlots() { return availableTimeSlots; }
     public void setAvailableTimeSlots(List<String> availableTimeSlots) { this.availableTimeSlots = availableTimeSlots; }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
 } 
