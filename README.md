@@ -10,7 +10,7 @@ A web-based table reservation platform inspired by OpenTable. This project allow
 | Member                     | Major Contributions                                             |
 |---------------------------|------------------------------------------------------------------|
 | **Abdul Muqtadir Mohammed** | Frontend (Search UI, Booking Confirmation, Register/Login), Email/SMS flow, Final UI polish |
-| **Jainam Chattbar**         | Backend (APIs for Auth, Booking, Admin Dashboard), DB schema, Deployment on AWS |
+| **Jainam Chhatbar**         | Backend (APIs for Auth, Booking, Admin Dashboard), DB schema, Deployment on AWS |
 
 ---
 

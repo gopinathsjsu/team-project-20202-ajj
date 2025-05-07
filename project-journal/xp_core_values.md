@@ -1,6 +1,6 @@
 # 💡 XP Core Values – BookTable Project
 
-**Team Members:** Abdul Muqtadir Mohammed, Jainam Chattbar  
+**Team Members:** Abdul Muqtadir Mohammed, Jainam Chhatbar  
 **Selected XP Core Values:**  
 - 🗣️ Communication  
 - ✨ Simplicity

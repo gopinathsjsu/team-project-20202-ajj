@@ -1,6 +1,6 @@
 # 📘 Weekly Scrum Report – BookTable Project
 
-**Team Members:** Abdul Muqtadir Mohammed, Jainam Chattbar  
+**Team Members:** Abdul Muqtadir Mohammed, Jainam Chhatbar  
 **Project Duration:** 6 Sprints  
 **Roles Implemented:** Customer, Admin  
 **Roles Skipped:** Restaurant Manager (not implemented)
@@ -18,7 +18,7 @@
 - **Blocked by:**
   - Waiting on backend API schema from Jainam
 
-### Jainam Chattbar
+### Jainam Chhatbar
 - **What did I complete?**
   - Set up Spring Boot backend, PostgreSQL schema, and project structure
   - Created base entities and repositories for Restaurant and Customer
