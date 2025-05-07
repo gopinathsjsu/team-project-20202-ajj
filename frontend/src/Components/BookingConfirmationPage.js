@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 
 function BookingConfirmationPage() {
   const { restaurantId, time, partySize, date } = useParams();
@@ -11,7 +11,7 @@ function BookingConfirmationPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/restaurants/${restaurantId}`)
+    api.get(`/api/restaurants/${restaurantId}`)
       .then(res => setRestaurant(res.data))
       .catch(err => {
         console.error('Failed to load restaurant', err);
@@ -22,17 +22,13 @@ function BookingConfirmationPage() {
   // Check availability before showing confirmation
   useEffect(() => {
     if (restaurant) {
-      axios.get(`http://localhost:8080/api/bookings/availability`, {
+      api.get(`/api/bookings/availability`, {
         params: {
           restaurantId,
           date,
           time,
           partySize
-        },
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-        }
-      })
+        }})
       .then(res => {
         if (!res.data) {
           setError('This time slot is no longer available. Please choose another time.');
@@ -57,11 +53,7 @@ function BookingConfirmationPage() {
       specialRequest
     };
 
-    axios.post('http://localhost:8080/api/bookings', bookingData, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-      }
-    })
+    api.post('api/bookings', bookingData)
       .then(() => {
         navigate('/bookings');
       })

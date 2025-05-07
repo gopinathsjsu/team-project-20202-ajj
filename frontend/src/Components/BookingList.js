@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 function BookingList() {
   const [bookings, setBookings] = useState([]);
@@ -14,9 +15,7 @@ function BookingList() {
 
   const fetchBookings = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/bookings', {
-        headers: authHeader
-      });
+      const response = await api.get('/api/bookings');
       setBookings(response.data);
       setLoading(false);
     } catch (err) {
@@ -39,9 +38,7 @@ function BookingList() {
 
   const handleCancelBooking = async (bookingId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/bookings/${bookingId}`, {
-        headers: authHeader
-      });
+      await api.delete(`/api/bookings/${bookingId}`);
       // Refresh the bookings list after cancellation
       fetchBookings();
     } catch (err) {

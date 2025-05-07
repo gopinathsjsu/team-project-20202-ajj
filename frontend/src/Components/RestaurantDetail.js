@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Typography, Box, Grid, Paper, Divider, Rating } from '@mui/material';
 import Review from './Review';
+import api from '../services/api';
 
 function RestaurantDetail() {
   const { id } = useParams();
@@ -29,12 +30,8 @@ function RestaurantDetail() {
     const fetchRestaurantData = async () => {
       try {
         const [restaurantRes, reviewsRes] = await Promise.all([
-          axios.get(`http://localhost:8080/api/restaurants/${id}`, {
-            headers: authHeader
-          }),
-          axios.get(`http://localhost:8080/api/restaurants/${id}/reviews`, {
-            headers: authHeader
-          })
+          api.get(`/api/restaurants/${id}`),
+          api.get(`/api/restaurants/${id}/reviews`)
         ]);
         
         if (mounted) {
@@ -71,7 +68,7 @@ function RestaurantDetail() {
       setError(null);
 
       try {
-        const response = await axios.get(`http://localhost:8080/api/bookings/availability`, {
+        const response = await api.get(`/api/bookings/availability`, {
           params: {
             restaurantId: id,
             date: selectedDate,

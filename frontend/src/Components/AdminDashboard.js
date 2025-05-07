@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('pending');
@@ -23,10 +23,7 @@ function AdminDashboard() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(
-        `http://localhost:8080/api/admin/restaurants/${activeTab}`,
-        authHeader
-      );
+      const response = await api.get(`/api/admin/restaurants/${activeTab}`);
       setRestaurants(response.data);
     } catch (err) {
       console.error('Error fetching restaurants:', err);
@@ -41,11 +38,7 @@ function AdminDashboard() {
 
   const handleStatusUpdate = async (restaurantId, action) => {
     try {
-      await axios.put(
-        `http://localhost:8080/api/admin/restaurants/${restaurantId}/${action}`,
-        {},
-        authHeader
-      );
+      await api.put(`/api/admin/restaurants/${restaurantId}/${action}`,{});
       fetchRestaurants();
     } catch (err) {
       console.error(`Error ${action} restaurant:`, err);

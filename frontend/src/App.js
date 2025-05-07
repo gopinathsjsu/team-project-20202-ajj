@@ -7,7 +7,6 @@ import Header from './Components/header';
 import SearchBar from './Components/searchbar';
 import RestaurantList from './Components/RestaurantList';
 import BookingList from './Components/BookingList';
-import ReservationPage from './Components/ReservationPage';
 import RestaurantDetail from './Components/RestaurantDetail';
 import BookingConfirmationPage from './Components/BookingConfirmationPage';
 import LoginPage from './Components/LoginPage';
@@ -35,14 +34,6 @@ function App() {
               element={
                 <PrivateRoute>
                   <BookingList />
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/reservations" 
-              element={
-                <PrivateRoute>
-                  <ReservationPage />
                 </PrivateRoute>
               } 
             />
