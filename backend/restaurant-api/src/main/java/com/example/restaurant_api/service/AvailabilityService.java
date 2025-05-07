@@ -111,9 +111,9 @@ public class AvailabilityService {
         // Parse the requested time
         LocalTime baseTime = LocalTime.parse(requestedTime, TIME_FORMATTER);
         
-        // Calculate the time window (±60 minutes)
-        LocalTime startTime = baseTime.minusMinutes(60);
-        LocalTime endTime = baseTime.plusMinutes(60);
+        // Calculate the time window (±30 minutes)
+        LocalTime startTime = baseTime.minusMinutes(30);
+        LocalTime endTime = baseTime.plusMinutes(30);
         
         // Ensure we don't go outside restaurant hours
         startTime = startTime.isBefore(OPENING_TIME) ? OPENING_TIME : startTime;
