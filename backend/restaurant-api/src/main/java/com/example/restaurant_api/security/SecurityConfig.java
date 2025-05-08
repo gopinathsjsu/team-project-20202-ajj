@@ -31,8 +31,7 @@ public class SecurityConfig {
                 .requestMatchers("/").permitAll()                                  // Home page
                 .requestMatchers("/auth/**").permitAll()                          // Authentication endpoints
                 .requestMatchers("/api/restaurants/**").permitAll()               // Restaurant endpoints
-                .requestMatchers("/api/otp/**").permitAll()                       // OTP endpoints
-                .requestMatchers("/health").permitAll()  // Health check endpoint is public
+                .requestMatchers("/health").permitAll()                           // Health check endpoint
                 
                 // Protected endpoints
                 .requestMatchers("/api/bookings/**").hasAnyRole("CUSTOMER", "ADMIN", "MANAGER")  // Booking endpoints
