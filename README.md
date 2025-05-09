@@ -86,7 +86,7 @@ Live UI Screens from the deployed BookTable application:
 ## 🧱 Architecture Diagrams
 
 📁 `/docs/diagrams/`
-- [🧩 Component Diagram](./docs/diagrams/Component_Diagram.jpeg)
+- [🧩 Component Diagram](./docs/diagrams/Updated_Component_Diagram.jpeg)
 - [🌐 Deployment Diagram](./docs/diagrams/Deployment_diagram.png)
 
 ## 🎯 Design Decisions
