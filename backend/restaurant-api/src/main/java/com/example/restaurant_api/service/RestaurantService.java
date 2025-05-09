@@ -112,7 +112,9 @@ public class RestaurantService {
     }
 
     private RestaurantDTO convertToDTO(Restaurant restaurant, String date, String baseTime, int partySize) {
-        int bookedCount = bookingRepository.countBookingsByRestaurantAndDate(restaurant, date);
+        System.out.println("Counting bookings for restaurant: " + restaurant.getId() + " on date: " + date);
+        int bookedCount = bookingRepository.countBookingsByRestaurantAndDate(restaurant.getId(), date);
+        System.out.println("Found " + bookedCount + " bookings");
         
         // Get available time slots if baseTime is provided
         List<String> availableSlots = null;

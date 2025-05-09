@@ -71,7 +71,7 @@ function RestaurantList() {
               <p>{restaurant.cuisine} · {restaurant.location}</p>
               <p>⭐ {restaurant.rating || '4.5'} / 5</p>
               <p style={{ fontSize: '14px', color: '#888' }}>
-                Booked {restaurant.bookedCountToday || 0} times today
+                Booked {restaurant.bookedCount || 0} times today
               </p>
             </div>
 

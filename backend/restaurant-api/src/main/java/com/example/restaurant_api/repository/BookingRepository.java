@@ -19,8 +19,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByUser(User user);
 
-    @Query("SELECT COUNT(b) FROM Booking b WHERE b.restaurant = :restaurant AND b.date = :date")
-    int countBookingsByRestaurantAndDate(@Param("restaurant") Restaurant restaurant, @Param("date") String date);
+    @Query("SELECT COUNT(b) FROM Booking b WHERE b.restaurant.id = :restaurantId AND b.date = :date")
+    int countBookingsByRestaurantAndDate(@Param("restaurantId") Long restaurantId, @Param("date") String date);
 
     List<Booking> findByDateBetween(String startDate, String endDate);
 }
